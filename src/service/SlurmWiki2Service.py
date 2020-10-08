@@ -18,7 +18,7 @@ class SlurmWiki2Service(SlurmService):
         argument_string = f'{timestamp}:{jobs_string}'
         request_string = f'CMD=GETJOBS ARG={argument_string}'
 
-        self.__socket.send(request_string)
+        self.__socket.send(request_string.encode())
 
         data = self.__socket.recv(1024)
         print(data)
