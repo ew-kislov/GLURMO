@@ -5,11 +5,11 @@ class SlurmService(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def start_job(self, job, nodes):
+    def start_job(self, job):
         raise NotImplementedError
 
     @abstractmethod
-    def get_jobs(self, time, jobs = None):
+    def get_jobs(self, time):
         raise NotImplementedError
 
     @abstractmethod
@@ -17,5 +17,9 @@ class SlurmService(object):
         raise NotImplementedError
 
     @abstractmethod
-    def get_event_hook(self):
+    def get_partitions(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def set_event_hook(self, url):
         raise NotImplementedError
