@@ -1,6 +1,9 @@
-from http_server.server import run_server
 import json
 import datetime
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, joinedload
@@ -10,38 +13,16 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, field
 from config.DbConfig import DbConfig
 
 from model.User import User
+from model.UserGroup import UserGroup
 from model.UserField import UserField
 from model.UserFieldValue import UserFieldValue
 
+from schema.UserFieldSchema import UserFieldSchema
+from schema.UserFieldValueSchema import UserFieldValueSchema
+from schema.UserSchema import UserSchema
+from schema.UserGroupSchema import UserGroupSchema
 
-class UserFieldSchema(SQLAlchemySchema):
-    id = auto_field()
-    name = auto_field()
-
-    class Meta:
-        model = UserField
-        load_instance = True
-        include_relationships = True
-
-
-class UserFieldValueSchema(SQLAlchemySchema):
-    value = auto_field()
-
-    class Meta:
-        model = UserFieldValue
-        load_instance = True
-        include_relationships = True
-
-    user_field = fields.Nested(UserFieldSchema)
-
-
-class UserSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = User
-        load_instance = True
-        include_relationships = True
-
-    values = fields.Nested(UserFieldValueSchema, many=True)
+from http_server.server import run_server
 
 
 db_config = DbConfig()
