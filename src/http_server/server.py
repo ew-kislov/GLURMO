@@ -1,8 +1,8 @@
 from flask import Flask
 import os
 
-from http_server.admin_router import admin_router
-from http_server.scheduler_router import scheduler_router
+from .admin_router import admin_router
+from .scheduler_router import scheduler_router
 
 def run_server():
     app = Flask(__name__)

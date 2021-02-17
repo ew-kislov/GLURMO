@@ -5,8 +5,8 @@ from ..config.DbConfig import DbConfig
 
 db_config = DbConfig()
 
-class UserGroup(db_config.Base):
-    __tablename__ = 'user_group'
+class SchedulerPartition(db_config.Base):
+    __tablename__ = 'scheduler_partition'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)

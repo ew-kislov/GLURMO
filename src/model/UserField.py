@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
-from config.DbConfig import DbConfig
+from ..config.DbConfig import DbConfig
 
 db_config = DbConfig()
 

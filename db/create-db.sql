@@ -7,6 +7,7 @@ create table user_group (
 create table user (
     id integer not null primary key autoincrement,
     name nvarchar(20) not null,
+    uid integer not null,
     pass_key nvarchar(50) not null,
     is_admin boolean default false,
     user_group_id integer,
@@ -16,7 +17,8 @@ create table user (
 
 create table scheduler_partition (
     id integer not null primary key autoincrement,
-    name nvarchar(20) not null
+    name nvarchar(20) not null,
+    creation_date datetime not null default current_timestamp
 );
 
 create table user_field (
@@ -41,7 +43,7 @@ create table limit_item (
     foreign key(user_field_id) references user_field(id)
 );
 
-create table bounded_limit (
+create table bound_limit (
     id integer not null primary key autoincrement,
     limit_id integer not null,
     user_id integer,
@@ -62,11 +64,11 @@ create table job_rule (
     id integer not null primary key autoincrement,
     soft_priority integer,
     soft_priority_period_minutes integer,
-    hard_priority,
+    hard_priority integer,
     creation_date datetime not null default current_timestamp
 );
 
-create table bounded_job_rule (
+create table bound_job_rule (
     id integer not null primary key autoincrement,
     job_rule_id integer not null,
     user_id integer,
@@ -90,7 +92,7 @@ create table booster (
     creation_date datetime not null default current_timestamp
 );
 
-create table bounded_booster (
+create table bound_booster (
     id integer not null primary key autoincrement,
     booster_id integer not null,
     user_id integer nou null,

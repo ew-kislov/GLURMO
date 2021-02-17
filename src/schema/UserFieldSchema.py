@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemySchema, fields, auto_field
 
-from model.UserField import UserField
+from ..model.UserField import UserField
 
 
 class UserFieldSchema(SQLAlchemySchema):
