@@ -7,6 +7,8 @@ create table user_group (
 create table user (
     id integer not null primary key autoincrement,
     name nvarchar(20) not null,
+    uid integer not null,
+    pass_key nvarchar(50) not null,
     is_admin boolean default false,
     user_group_id integer,
     creation_date datetime not null default current_timestamp,
@@ -15,7 +17,8 @@ create table user (
 
 create table scheduler_partition (
     id integer not null primary key autoincrement,
-    name nvarchar(20) not null
+    name nvarchar(20) not null,
+    creation_date datetime not null default current_timestamp
 );
 
 create table user_field (
@@ -40,31 +43,18 @@ create table limit_item (
     foreign key(user_field_id) references user_field(id)
 );
 
-create table user_limit (
-    id integer not null primary key autoincrement,
-    creation_date datetime not null default current_timestamp
-);
-
-create table limit_item_limit_join (
-    limit_id integer not null,
-    limit_item_id integer not null,
-    foreign key(limit_id) references user_limit(id),
-    foreign key(limit_item_id) references limit_item(id)
-);
-
-create table bounded_limit (
+create table bound_limit (
     id integer not null primary key autoincrement,
     limit_id integer not null,
     user_id integer,
     user_group_id integer,
     scheduler_partition_id integer,
     refresh_period_days integer,
-    last_refreshed datetime,
     priority integer,
-    is_default boolean,
-    is_active boolean not null,
+    is_default boolean not null default false,
+    is_active boolean not null default false,
     creation_date datetime not null default current_timestamp,
-    foreign key(limit_id) references user_limit(id),
+    foreign key(limit_id) references limit_item(id),
     foreign key(user_id) references user(id),
     foreign key(user_group_id) references user_group(id),
     foreign key(scheduler_partition_id) references scheduler_partition(id)
@@ -73,20 +63,20 @@ create table bounded_limit (
 create table job_rule (
     id integer not null primary key autoincrement,
     soft_priority integer,
-    soft_priority_period_days integer,
-    hard_priority,
+    soft_priority_period_minutes integer,
+    hard_priority integer,
     creation_date datetime not null default current_timestamp
 );
 
-create table bounded_job_rule (
+create table bound_job_rule (
     id integer not null primary key autoincrement,
     job_rule_id integer not null,
     user_id integer,
     user_group_id integer,
     scheduler_partition_id integer,
     priority integer,
-    is_default integer,
-    is_active boolean not null,
+    is_default integer not null default false,
+    is_active boolean not null default false,
     creation_date datetime not null default current_timestamp,
     foreign key(job_rule_id) references job_rule(id),
     foreign key(user_id) references user(id),
@@ -98,28 +88,18 @@ create table booster (
     id integer not null primary key autoincrement,
     soft_priority_increase integer,
     hard_priority_increase integer,
+    period_minutes integer not null,
     creation_date datetime not null default current_timestamp
 );
 
-create table user_field_booster_join (
-    booster_id integer not null,
-    user_field_id integer not null,
-    foreign key(booster_id) references booster(id)
-    foreign key(user_field_id) references user_field(id)
-);
-
-create table bounded_booster (
+create table bound_booster (
     id integer not null primary key autoincrement,
     booster_id integer not null,
-    user_id integer,
-    user_group_id integer,
-    scheduler_partition_id integer,
+    user_id integer nou null,
     amount integer not null,
     creation_date datetime not null default current_timestamp,
     foreign key(booster_id) references booster(id),
-    foreign key(user_id) references user(id),
-    foreign key(user_group_id) references user_group(id),
-    foreign key(scheduler_partition_id) references scheduler_partition(id)
+    foreign key(user_id) references user(id)
 );
 
 insert into
