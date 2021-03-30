@@ -14,5 +14,5 @@ class SlurmRestService(SlurmService):
     def get_partitions(self):
         pass
 
-    def set_event_hook(self, url):
+    def set_subscriber(self, subscriber):
         pass

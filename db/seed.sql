@@ -48,14 +48,16 @@ insert into
 values
     (null, null, 3),
     (null, null, 2),
-    (1, 2, 1);
+    (1, 2, 1),
+    (null, null, 10);
 
 insert into
-    bound_job_rule(job_rule_id, user_group_id)
+    bound_job_rule(job_rule_id, user_id, is_default)
 values
-    (1, 1),
-    (2, 2),
-    (3, 3);
+    (1, 3, false),
+    (2, 2, false),
+    (3, 1, false),
+    (4, null, true);
 
 insert into
     booster(soft_priority_increase, hard_priority_increase, period_minutes)

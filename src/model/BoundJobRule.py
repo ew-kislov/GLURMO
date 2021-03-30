@@ -22,3 +22,4 @@ class BoundJobRule(db_config.Base):
     creation_date = Column(DateTime, nullable=False)
 
     job_rule = relationship('JobRule')
+    user = relationship('User')
