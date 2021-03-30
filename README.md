@@ -6,7 +6,7 @@ Task Scheduler for MSU supercomputers
 
 ## Run
 
-`TODO`
+`python -m src.scheduler`
 
 ## Structure
 

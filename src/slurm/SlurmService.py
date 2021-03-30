@@ -21,5 +21,5 @@ class SlurmService(object):
         raise NotImplementedError
 
     @abstractmethod
-    def set_event_hook(self, url):
+    def set_subscriber(self, subscriber):
         raise NotImplementedError
