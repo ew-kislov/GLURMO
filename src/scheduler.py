@@ -93,8 +93,8 @@ def process_slurm_event(event):
     # elif (event.get_type() == EEvent.JobStarted):
     #     print(f"Job with id #{event.get_payload()} started")
 
-    if (event.get_type() == EEvent.JobDone):
-        pprint(event.get_payload())
+    if (event.get_type() == EEvent.JobQueued):
+        slurm_service.start_job(event.get_payload()['id'])
 
 
 # init slurm service, set event handler, emit queued event on slurm waiting jobs

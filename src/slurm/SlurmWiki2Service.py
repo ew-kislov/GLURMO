@@ -39,7 +39,7 @@ class SlurmWiki2Service(SlurmService):
                     jobs = self.__get_jobs()
 
                     for subscriber in self.__subscribers:
-                        subscriber(Event(EEvent.JobDone, jobs[-1]))
+                        subscriber(Event(EEvent.JobQueued, jobs[-1]))
 
     def __get_jobs(self):
         client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -48,7 +48,7 @@ class SlurmWiki2Service(SlurmService):
         command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=GETJOBS ARG=0:ALL\n'
         header = str(len(command) - 1).zfill(8)
 
-        print(f'Running command: header "{header}" body "{command}"')
+        print(f'Running command: header "{header}" body {command}')
 
         client_fd.send(str.encode(header));
         client_fd.send(str.encode(command))
@@ -61,6 +61,23 @@ class SlurmWiki2Service(SlurmService):
         client_fd.close()
 
         return jobs
+
+    def start_job(self, id):
+        client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_fd.connect((self.__host, int(self.__wiki2_port)))
+
+        command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=STARTJOB ARG={id} TASKLIST=localhost'
+        header = str(len(command) - 1).zfill(8)
+
+        print(f'Running command: header "{header}" body {command}')
+
+        client_fd.send(str.encode(header));
+        client_fd.send(str.encode(command))
+
+        header = int(client_fd.recv(8).decode())
+        response = client_fd.recv(header).decode()
+
+        client_fd.close()
 
     def __parse_jobs(self, jobsRaw):
         jobsRawList = jobsRaw.split('#')
