@@ -36,24 +36,12 @@ class SlurmWiki2Service(SlurmService):
                     break
 
                 if data.strip() == '1234':
-                    # jobs = self.__get_jobs(conn)
+                    jobs = self.__get_jobs()
 
-                    # for subscriber in self.__subscribers:
-                    #     subscriber(Event(EEvent.JobDone, jobs[-1]))
+                    for subscriber in self.__subscribers:
+                        subscriber(Event(EEvent.JobDone, jobs[-1]))
 
-                    print('getting jobs')
-                    client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    client_fd.connect(('127.0.0.1', 7321))
-                    client_fd.send(str.encode('00000057'));
-                    client_fd.send(str.encode('AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL\n'))
-                    header = int(client_fd.recv(8).decode())
-                    print(header)
-                    jobs = client_fd.recv(header).decode()
-                    print(jobs)
-                    print('ended')
-                    client_fd.close()
-
-    def __get_jobs(self, conn):
+    def __get_jobs(self):
         client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_fd.connect((self.__host, int(self.__wiki2_port)))
         
@@ -61,8 +49,11 @@ class SlurmWiki2Service(SlurmService):
         header = str(len(command)).zfill(8)
         print(header)
         print(command)
-        conn.send(str.encode(header))
-        conn.send(str.encode(command))
+        # conn.send(str.encode(header))
+        # conn.send(str.encode(command))
+
+        client_fd.send(str.encode('00000057'));
+        client_fd.send(str.encode('AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL\n'))
 
         header = int(client_fd.recv(8).decode())
         jobsRaw = client_fd.recv(header).decode()
