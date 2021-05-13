@@ -1,5 +1,6 @@
 import socket
 import os;
+import time;
 
 from .SlurmService import SlurmService
 
@@ -30,7 +31,7 @@ class SlurmWiki2Service(SlurmService):
             conn, addr = self.__socket.accept()
             print('Connected by', addr)
             while True:
-                data = conn.recv(4)
+                data = conn.recv(4).decode()
                 if not data:
                     break
 
@@ -44,10 +45,12 @@ class SlurmWiki2Service(SlurmService):
         client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_fd.connect((self.__host, int(self.__wiki2_port)))
         
-        command = 'AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL'
+        command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=GETJOBS ARG=0:ALL'
         header = str(len(command)).zfill(8)
+        print(header)
+        print(command)
         conn.send(str.encode(header))
-        conn.send(str.encode('AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL'))
+        conn.send(str.encode(command))
 
         header = int(client_fd.recv(8).decode())
         jobsRaw = client_fd.recv(header).decode()
