@@ -45,7 +45,7 @@ class SlurmWiki2Service(SlurmService):
         client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_fd.connect((self.__host, int(self.__wiki2_port)))
         
-        command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=GETJOBS ARG=0:ALL'
+        command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=GETJOBS ARG=0:ALL\n'
         header = str(len(command)).zfill(8)
         print(header)
         print(command)
