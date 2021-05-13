@@ -7,8 +7,8 @@ from .EEvent import EEvent
 from .Event import Event
 
 class SlurmWiki2Service(SlurmService):
-    def __init__(self, config):
-        self.__init_connection(config)
+    def __init__(self):
+        self.__init_connection()
 
         self.__subscribers = []
 
