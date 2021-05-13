@@ -46,14 +46,12 @@ class SlurmWiki2Service(SlurmService):
         client_fd.connect((self.__host, int(self.__wiki2_port)))
         
         command = f'AUTH=slurm DT=SC=-300 TS={round(time.time())} CMD=GETJOBS ARG=0:ALL\n'
-        header = str(len(command)).zfill(8)
-        print(header)
-        print(command)
-        # conn.send(str.encode(header))
-        # conn.send(str.encode(command))
+        header = str(len(command) - 1).zfill(8)
 
-        client_fd.send(str.encode('00000057'));
-        client_fd.send(str.encode('AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL\n'))
+        print(f'Running command: header "{header}" body "{command}"')
+
+        client_fd.send(str.encode(header));
+        client_fd.send(str.encode(command))
 
         header = int(client_fd.recv(8).decode())
         jobsRaw = client_fd.recv(header).decode()
