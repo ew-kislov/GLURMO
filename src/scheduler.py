@@ -105,8 +105,4 @@ slurm_service = SlurmWiki2Service()
 
 slurm_service.set_subscriber(process_slurm_event)
 
-for job in slurm_service.get_jobs():
-    process_slurm_event(Event(EEvent.JobQueued, job))
-
-
 slurm_service.run()

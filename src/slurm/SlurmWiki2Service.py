@@ -17,6 +17,7 @@ class SlurmWiki2Service(SlurmService):
         self.__init_connection()
 
     def __init_connection(self):
+        print(int(self.__port_for_wiki2))
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__socket.bind((self.__host, int(self.__port_for_wiki2)))
         self.__socket.listen(10)
