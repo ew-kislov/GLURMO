@@ -8,17 +8,17 @@ from .Event import Event
 
 class SlurmWiki2Service(SlurmService):
     def __init__(self):
-        self.__init_connection()
-
         self.__subscribers = []
 
         self.__host = os.getenv("WIKI2_HOST")
         self.__wiki2_port = os.getenv("WIKI2_PORT")
         self.__port_for_wiki2 = os.getenv("PORT_FOR_WIKI2")
 
+        self.__init_connection()
+
     def __init_connection(self):
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__socket.bind((self.__host, self.__port_for_wiki2))
+        self.__socket.bind((self.__host, int(self.__port_for_wiki2)))
         self.__socket.listen(10)
 
     def set_subscriber(self, subscriber):
@@ -41,7 +41,7 @@ class SlurmWiki2Service(SlurmService):
 
     def __get_jobs(self, conn):
         client_fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_fd.connect((self.__host, self.__wiki2_port))
+        client_fd.connect((self.__host, int(self.__wiki2_port)))
         
         command = 'AUTH=slurm DT=SC=-300 TS=1620048581 CMD=GETJOBS ARG=0:ALL'
         header = str(len(command)).zfill(8)
